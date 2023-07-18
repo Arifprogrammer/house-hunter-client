@@ -20,7 +20,48 @@ const SignIn = () => {
   const navigate = useNavigate();
 
   //* functions
-  const onSubmit = (data) => {};
+  const onSubmit = (data) => {
+    setDisable(true);
+    const { email, password } = data;
+    const getUser = async () => {
+      const res = await fetch(`http://localhost:5000/users?email=${email}`);
+      const getData = await res.json();
+      console.log(getData);
+      if (getData.email === null) {
+        setEmailError("Email is not found in Database please register.");
+        setDisable(false);
+        return;
+      } else if (getData.password !== password) {
+        setEmailError("");
+        setPassError("Your password is incorrect.");
+        setDisable(false);
+        return;
+      } else {
+        setEmailError("");
+        setPassError("");
+        const updateGetData = { ...getData };
+        updateGetData.registerId = updateGetData._id;
+        delete updateGetData._id;
+        const addSignedinUser = async () => {
+          const res = await fetch("http://localhost:5000/signedinusers", {
+            method: "PUT",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(updateGetData),
+          });
+          const data = await res.json();
+          console.log(data);
+          if (data.upsertedCount || data.matchedCount) {
+            reset();
+            setTimeout(() => {
+              navigate("/");
+            }, 2000);
+          }
+        };
+        addSignedinUser();
+      }
+    };
+    getUser();
+  };
 
   return (
     <>
