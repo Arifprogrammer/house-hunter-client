@@ -1,9 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const SignIn = () => {
   //* hooks
@@ -11,6 +12,7 @@ const SignIn = () => {
   const [emailError, setEmailError] = useState("");
   const [showPassword, setShowPassword] = useState(true);
   const [disable, setDisable] = useState(false);
+  const { setUser } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -26,7 +28,6 @@ const SignIn = () => {
     const getUser = async () => {
       const res = await fetch(`http://localhost:5000/users?email=${email}`);
       const getData = await res.json();
-      console.log(getData);
       if (getData.email === null) {
         setEmailError("Email is not found in Database please register.");
         setDisable(false);
@@ -49,8 +50,8 @@ const SignIn = () => {
             body: JSON.stringify(updateGetData),
           });
           const data = await res.json();
-          console.log(data);
           if (data.upsertedCount || data.matchedCount) {
+            setUser(updateGetData);
             reset();
             setTimeout(() => {
               navigate("/");

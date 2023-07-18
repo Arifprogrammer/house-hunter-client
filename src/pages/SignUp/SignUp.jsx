@@ -25,7 +25,6 @@ const SignUp = () => {
         body: JSON.stringify(updatedData),
       });
       const data = await res.json();
-      console.log(data);
       if (data.upsertedCount || data.matchedCount) {
         reset();
         setTimeout(() => {
