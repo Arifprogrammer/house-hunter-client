@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const SignUp = () => {
@@ -8,34 +8,32 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
     reset,
   } = useForm();
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const from = state?.from?.pathname || "/";
 
   //* functions
 
   const onSubmit = (data) => {
     const { email, password, name, mobile, role } = data;
-    console.log(data);
-    /* const addUser = async () => {
-      const res = await fetch("", {
+    const updatedData = { ...data };
+    updatedData.mobile = `+880${updatedData.mobile}`;
+    const addUser = async () => {
+      const res = await fetch("http://localhost:5000/users", {
         method: "PUT",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(),
+        body: JSON.stringify(updatedData),
       });
       const data = await res.json();
       console.log(data);
       if (data.upsertedCount || data.matchedCount) {
         reset();
         setTimeout(() => {
-          navigate(from, { replace: true });
+          navigate("/login");
         }, 2000);
       }
     };
-    addUser(); */
+    addUser();
   };
 
   return (
@@ -179,11 +177,7 @@ const SignUp = () => {
             </div>
             <p className="text-center font-semibold">
               Already have an account?{" "}
-              <Link
-                to="/login"
-                state={{ from: state?.from }}
-                className="text-blue-900 font-bold"
-              >
+              <Link to="/login" className="text-blue-900 font-bold">
                 Login
               </Link>
             </p>

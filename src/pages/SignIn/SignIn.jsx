@@ -2,13 +2,15 @@
 /* eslint-disable no-unused-vars */
 import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const SignIn = () => {
   //* hooks
-  const [error, setError] = useState("");
+  const [passError, setPassError] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [showPassword, setShowPassword] = useState(true);
+  const [disable, setDisable] = useState(false);
   const {
     register,
     handleSubmit,
@@ -16,37 +18,9 @@ const SignIn = () => {
     reset,
   } = useForm();
   const navigate = useNavigate();
-  const { state } = useLocation();
-  const from = state?.from?.pathname || "/";
 
   //* functions
-  const onSubmit = (data) => {
-    const { email, password } = data;
-    console.log(data);
-    /* signIn(email, password)
-      .then((result) => {
-        toast.success("Login successful", {
-          position: "top-center",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-        setTimeout(() => {
-          navigate(from, { replace: true });
-        }, 2000);
-        reset();
-      })
-      .catch((error) => {
-        console.log(error.message);
-        if (error.message === "Firebase: Error (auth/wrong-password).") {
-          setError("Your password is incorrect");
-        }
-      }); */
-  };
+  const onSubmit = (data) => {};
 
   return (
     <>
@@ -73,6 +47,9 @@ const SignIn = () => {
                   Email is required
                 </p>
               )}
+              <p className="text-red-600 font-semibold mt-1 ml-2">
+                {emailError}
+              </p>
             </div>
             <div className="form-control">
               <label className="label">
@@ -103,12 +80,19 @@ const SignIn = () => {
                   Password is required
                 </p>
               )}
-              <p className="text-red-600 font-semibold mt-1 ml-2">{error}</p>
+              <p className="text-red-600 font-semibold mt-1 ml-2">
+                {passError}
+              </p>
             </div>
             <div className="form-control mt-6">
               <button
                 type="submit"
-                className="btn bg-lime-400 text-blue-900 border-0 hover:bg-white hover:text-blue-900 hover:border-2 hover:border-blue-900 text-base lg:text-xl"
+                className={`btn text-base lg:text-xl border-0 ${
+                  disable === false
+                    ? "bg-lime-400 text-blue-900 hover:bg-white hover:text-blue-900 hover:border-2 hover:border-blue-900"
+                    : "bg-lime-300"
+                } `}
+                disabled={disable}
               >
                 Login
               </button>
@@ -120,11 +104,7 @@ const SignIn = () => {
             </div>
             <p className="text-center font-semibold">
               Don't have an account?{" "}
-              <Link
-                to="/register"
-                state={{ from: state?.from }}
-                className="text-blue-900 font-bold"
-              >
+              <Link to="/register" className="text-blue-900 font-bold">
                 Register
               </Link>
             </p>
