@@ -1,8 +1,10 @@
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
+import { useContext } from "react";
 
 const Header = () => {
-  //   const user = { name: "Arif" };
-  const user = null;
+  const { user, logOut } = useContext(AuthContext);
+  console.log(user, logOut);
   const listItem = (
     <>
       <li>
@@ -32,7 +34,9 @@ const Header = () => {
             </NavLink>
           </li>
           <li className="lg:hidden">
-            <button className="font-semibold">Logout</button>
+            <button className="font-semibold" onClick={logOut}>
+              Logout
+            </button>
           </li>
         </>
       ) : (
@@ -104,7 +108,10 @@ const Header = () => {
           </ul>
           {user ? (
             <div className=" hidden lg:flex items-center gap-6">
-              <button className="py-3 px-8 font-semibold  text-white  bg-blue-900 hover:text-blue-900 hover:bg-white lg:transition lg:duration-200">
+              <button
+                className="py-3 px-8 font-semibold  text-white  bg-blue-900 hover:text-blue-900 hover:bg-white lg:transition lg:duration-200"
+                onClick={logOut}
+              >
                 Logout
               </button>
             </div>

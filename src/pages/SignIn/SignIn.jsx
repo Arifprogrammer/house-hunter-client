@@ -43,6 +43,7 @@ const SignIn = () => {
         const updateGetData = { ...getData };
         updateGetData.registerId = updateGetData._id;
         delete updateGetData._id;
+        delete updateGetData.password;
         const addSignedinUser = async () => {
           const res = await fetch("http://localhost:5000/signedinusers", {
             method: "PUT",
@@ -51,7 +52,7 @@ const SignIn = () => {
           });
           const data = await res.json();
           if (data.upsertedCount || data.matchedCount) {
-            setUser(updateGetData);
+            localStorage.setItem("user", JSON.stringify(updateGetData));
             reset();
             setTimeout(() => {
               navigate("/");
