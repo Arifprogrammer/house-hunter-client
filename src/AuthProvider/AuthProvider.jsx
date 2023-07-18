@@ -21,6 +21,9 @@ const AuthProvider = ({ children }) => {
         email: user.email,
       });
       console.log(res.data);
+      if (res.data.deletedCount > 0) {
+        setUser(null);
+      }
     };
     deleteUser();
   };

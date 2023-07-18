@@ -52,6 +52,7 @@ const SignIn = () => {
           });
           const data = await res.json();
           if (data.upsertedCount || data.matchedCount) {
+            setUser(updateGetData);
             localStorage.setItem("user", JSON.stringify(updateGetData));
             reset();
             setTimeout(() => {

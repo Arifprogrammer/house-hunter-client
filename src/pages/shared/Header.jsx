@@ -4,7 +4,6 @@ import { useContext } from "react";
 
 const Header = () => {
   const { user, logOut } = useContext(AuthContext);
-  console.log(user, logOut);
   const listItem = (
     <>
       <li>
