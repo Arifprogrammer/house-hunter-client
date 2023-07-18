@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import SignUp from "../pages/SignUp/SignUp";
 import SignIn from "../pages/SignIn/SignIn";
+import Home from "../pages/Home/Home/Home";
 
 const Router = createBrowserRouter([
   {
@@ -10,7 +11,8 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <p className="pt-20">Hello World</p>,
+        element: <Home />,
+        loader: () => fetch("http://localhost:5000/totalhouses"),
       },
       {
         path: "register",

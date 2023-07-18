@@ -20,7 +20,6 @@ const AuthProvider = ({ children }) => {
       const res = await axios.delete("http://localhost:5000/signedinusers", {
         email: user.email,
       });
-      console.log(res.data);
       if (res.data.deletedCount > 0) {
         setUser(null);
       }
