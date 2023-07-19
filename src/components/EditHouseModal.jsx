@@ -9,6 +9,7 @@ export default function EditHouseModal({ open, setOpen, house }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const { user } = useContext(AuthContext);
@@ -31,7 +32,22 @@ export default function EditHouseModal({ open, setOpen, house }) {
   } = house;
 
   const onSubmit = (data) => {
-    console.log(data);
+    const editHouse = async () => {
+      const res = await fetch(
+        `https://house-hunter-server-sage.vercel.app/update?id=${_id}`,
+        {
+          method: "PUT",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
+      const data = await res.json();
+      if (data.upsertedCount || data.matchedCount) {
+        reset();
+        setOpen(false);
+      }
+    };
+    editHouse();
   };
 
   return (
