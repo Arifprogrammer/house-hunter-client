@@ -95,10 +95,9 @@ const SignUp = () => {
                 <select
                   {...register("role", { required: true })}
                   className="select select-bordered w-full max-w-[50%]"
+                  value="Select role..."
                 >
-                  <option defaultValue="" disabled selected>
-                    Select role...
-                  </option>
+                  <option disabled>Select role...</option>
                   <option value="House Owner">House Owner</option>
                   <option value="House Renter">House Renter</option>
                 </select>

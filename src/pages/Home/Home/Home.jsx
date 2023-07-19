@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import House from "../House/House";
 import { useLoaderData } from "react-router-dom";
+import { BsFilterRight } from "react-icons/bs";
+import FilterModal from "../../../components/FilterModal";
 
 const Home = () => {
   //* hooks
   const [houses, setHouses] = useState([]);
-  const { totalHouses } = useLoaderData();
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [open, setOpen] = useState(false);
+  const { totalHouses } = useLoaderData();
   const totalPages = Math.ceil(totalHouses / itemsPerPage);
   const pagesNumbers = [...Array(totalPages).keys()];
   const options = [5, 10, 20];
@@ -31,13 +34,22 @@ const Home = () => {
 
   return (
     <section className="my-container my-16 lg:mt-12 lg:mb-20">
-      <div className="text-center mb-16">
+      <div className="mb-16 flex justify-center items-center gap-x-6">
         <div className="join w-3/5">
           <input
             className="input input-bordered join-item grow"
             placeholder="Search..."
           />
-          <button className="btn join-item rounded-r-full">Search</button>
+          <button className="btn join-item rounded-r-full bg-slate-300">
+            Search
+          </button>
+        </div>
+        <div
+          className="flex items-center gap-x-1 cursor-pointer"
+          onClick={() => setOpen(true)}
+        >
+          <BsFilterRight className="text-xl font-bold" />
+          <p className="font-semibold">Filter</p>
         </div>
       </div>
       <div className="grid grid-col-1 lg:grid-cols-3 gap-12 lg:gap-x-20">
@@ -48,7 +60,7 @@ const Home = () => {
       <div className="text-center mt-12">
         {pagesNumbers.map((number) => (
           <button
-            className={`px-3 py-1 rounded-lg text-black mr-3 ${
+            className={`px-3 py-1 rounded-full text-black mr-3 ${
               currentPage === number ? "bg-[#A3E635]" : "bg-slate-200"
             }`}
             key={number}
@@ -60,7 +72,7 @@ const Home = () => {
         <select
           value={itemsPerPage}
           onChange={handleSelectChange}
-          className="text-black border-2 border-blue-900 py-[2px] rounded-lg"
+          className="text-black border-2 border-blue-900 py-[2px] rounded-full"
         >
           {options.map((option) => (
             <option key={option} value={option}>
@@ -69,6 +81,7 @@ const Home = () => {
           ))}
         </select>
       </div>
+      <FilterModal open={open} setOpen={setOpen} />
     </section>
   );
 };
