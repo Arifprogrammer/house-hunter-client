@@ -1,9 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import { useContext } from "react";
+import useRole from "../../hooks/useRole";
 
 const Header = () => {
   const { user, logOut } = useContext(AuthContext);
+  const [isRole] = useRole();
   const listItem = (
     <>
       <li>
@@ -22,7 +24,10 @@ const Header = () => {
         <>
           <li>
             <NavLink
-              to="/dashboard"
+              to={`${
+                (isRole.renter && "/dashboard/bookedhouse") ||
+                (isRole.admin && "/dashboard/managehouse")
+              }`}
               className={({ isActive }) =>
                 isActive
                   ? "text-blue-900 font-semibold lg:border-b-4 border-b-blue-900 bg-transparent"

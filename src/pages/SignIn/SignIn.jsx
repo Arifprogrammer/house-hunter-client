@@ -61,9 +61,16 @@ const SignIn = () => {
             setUser(updateGetData);
             localStorage.setItem("user", JSON.stringify(updateGetData));
             reset();
-            setTimeout(() => {
-              navigate("/");
-            }, 2000);
+            if (updateGetData.role === "House Renter") {
+              setTimeout(() => {
+                navigate("/dashboard/bookedhouse");
+              }, 1000);
+            }
+            if (updateGetData.role === "House Owner") {
+              setTimeout(() => {
+                navigate("/dashboard/managehouse");
+              }, 1000);
+            }
           }
         };
         addSignedinUser();

@@ -4,6 +4,8 @@ import SignUp from "../pages/SignUp/SignUp";
 import SignIn from "../pages/SignIn/SignIn";
 import Home from "../pages/Home/Home/Home";
 import SpecificHouse from "../pages/SpecificHouse/SpecificHouse";
+import Dashboard from "../layouts/DashboardLayout";
+import BookedHouse from "../pages/Dashboard/Renter/BookedHouse";
 
 const Router = createBrowserRouter([
   {
@@ -27,6 +29,17 @@ const Router = createBrowserRouter([
       {
         path: "login",
         element: <SignIn />,
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: <Dashboard />,
+    children: [
+      //! student routes
+      {
+        path: "bookedhouse",
+        element: <BookedHouse />,
       },
     ],
   },

@@ -6,7 +6,6 @@ const SpecificHouse = () => {
   const { id } = useParams();
   const [house, setHouse] = useState({});
   const {
-    _id,
     address,
     city,
     houseName,
@@ -28,7 +27,6 @@ const SpecificHouse = () => {
         `https://house-hunter-server-sage.vercel.app/houses/${id}`
       );
       const data = await res.json();
-      console.log(data);
       setHouse(data);
     };
     loadData();

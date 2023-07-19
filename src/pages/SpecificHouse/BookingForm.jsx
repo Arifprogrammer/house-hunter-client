@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
@@ -30,8 +29,8 @@ const BookingForm = ({ price, house }) => {
     delete bookHouse._id;
     bookHouse.renterName = user?.name;
     bookHouse.renterEmail = user?.email;
-    bookHouse.phone = `+880${data.phone}`;
-    const addNewClasses = async () => {
+    bookHouse.renterPhone = `+880${data.phone}`;
+    const addHouse = async () => {
       const res = await axiosSecure.post(`/bookhouse`, bookHouse);
       if (res.data.insertedId) {
         const Toast = Swal.mixin({
@@ -51,12 +50,29 @@ const BookingForm = ({ price, house }) => {
           title: "Booked successfully",
         });
         setTimeout(() => {
-          navigate("/");
+          navigate("/dashboard/bookedhouse");
         }, 1500);
       }
     };
-    addNewClasses();
+    addHouse();
   };
+
+  useEffect(() => {
+    if (user) {
+      const exisitngHouse = async () => {
+        const res = await axiosSecure.get(`/bookedhouse?email=${user.email}`);
+        if (res.data.length === 2) {
+          setDisable(true);
+        } else {
+          const newData = res.data.find((d) => d.houseId === house._id);
+          if (newData) {
+            setDisable(true);
+          }
+        }
+      };
+      exisitngHouse();
+    }
+  }, [user, axiosSecure, house._id]);
 
   return (
     <div className="card w-full lg:w-96 bg-transparent mx-auto my-12 rounded-sm shadow-md shadow-blue-900 lg:fixed lg:top-28 lg:right-7">
@@ -139,7 +155,7 @@ const BookingForm = ({ price, house }) => {
           </button>
           {disable && (
             <p className="text-red-600 font-semibold mt-1 ml-2">
-              {`You have to login as "House Renter"`}
+              {`You have to login as "House Renter" and "House Renter" can only book 2 houses`}
             </p>
           )}
         </div>
