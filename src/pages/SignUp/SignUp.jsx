@@ -29,7 +29,7 @@ const SignUp = () => {
       const data = await res.json();
       if (data.user === "exist") {
         setError("User already exist please login");
-      } else if (data.upsertedCount || data.matchedCount) {
+      } else if (data.insertedId) {
         reset();
         setTimeout(() => {
           navigate("/login");
@@ -92,7 +92,7 @@ const SignUp = () => {
               )}
               {errors.mobile?.type === "pattern" && (
                 <p className="text-red-600 font-semibold mt-1 ml-2">
-                  Number must be start with 1 & must have 11 number in total.
+                  Number must be start with 1 & must have 10 number in total.
                 </p>
               )}
               <div className="from-control mt-6 font-semibold text-black">
@@ -101,7 +101,9 @@ const SignUp = () => {
                   className="select select-bordered w-full max-w-[50%]"
                   value="Select role..."
                 >
-                  <option disabled>Select role...</option>
+                  <option value="" disabled>
+                    Select role...
+                  </option>
                   <option value="House Owner">House Owner</option>
                   <option value="House Renter">House Renter</option>
                 </select>

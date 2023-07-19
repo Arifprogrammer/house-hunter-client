@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
@@ -21,6 +22,18 @@ export default function FilterModal({ open, setOpen }) {
 
   const onSubmit = (data) => {
     const cleanedEmptyData = removeEmptyStringProperties(data);
+    if (cleanedEmptyData.hasOwnProperty("pricemax")) {
+      cleanedEmptyData.pricemax = parseInt(cleanedEmptyData.pricemax);
+    }
+    if (cleanedEmptyData.hasOwnProperty("pricemin")) {
+      cleanedEmptyData.pricemin = parseInt(cleanedEmptyData.pricemin);
+    }
+    if (cleanedEmptyData.hasOwnProperty("bathRooms")) {
+      cleanedEmptyData.bathRooms = parseInt(cleanedEmptyData.bathRooms);
+    }
+    if (cleanedEmptyData.hasOwnProperty("bedRooms")) {
+      cleanedEmptyData.bedRooms = parseInt(cleanedEmptyData.bedRooms);
+    }
     console.log(cleanedEmptyData);
     setOpen(false);
   };
@@ -176,7 +189,7 @@ export default function FilterModal({ open, setOpen }) {
                       <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                         <button
                           type="submit"
-                          className="inline-flex lg:w-full justify-center rounded-md bg-lime-400 px-3 py-2 text-sm font-semibold text-blue-900 shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto gap-x-2"
+                          className="inline-flex justify-center rounded-md bg-lime-400 px-3 py-2 text-sm font-semibold text-blue-900 shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto gap-x-2"
                         >
                           <BsFilterRight className="text-xl font-bold" />
                           <p>Filter</p>
