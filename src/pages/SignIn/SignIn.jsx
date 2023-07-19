@@ -13,6 +13,7 @@ const SignIn = () => {
   const [showPassword, setShowPassword] = useState(true);
   const [disable, setDisable] = useState(false);
   const { setUser } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -26,7 +27,9 @@ const SignIn = () => {
     setDisable(true);
     const { email, password } = data;
     const getUser = async () => {
-      const res = await fetch(`http://localhost:5000/users?email=${email}`);
+      const res = await fetch(
+        `https://house-hunter-server-sage.vercel.app/users?email=${email}`
+      );
       const getData = await res.json();
       if (getData.email === null) {
         setEmailError("Email is not found in Database please register.");
@@ -45,11 +48,14 @@ const SignIn = () => {
         delete updateGetData._id;
         delete updateGetData.password;
         const addSignedinUser = async () => {
-          const res = await fetch("http://localhost:5000/signedinusers", {
-            method: "PUT",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify(updateGetData),
-          });
+          const res = await fetch(
+            "https://house-hunter-server-sage.vercel.app/signedinusers",
+            {
+              method: "PUT",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify(updateGetData),
+            }
+          );
           const data = await res.json();
           if (data.upsertedCount || data.matchedCount) {
             setUser(updateGetData);

@@ -17,9 +17,12 @@ const AuthProvider = ({ children }) => {
 
   const logOut = () => {
     const deleteUser = async () => {
-      const res = await axios.delete("http://localhost:5000/signedinusers", {
-        email: user.email,
-      });
+      const res = await axios.delete(
+        "https://house-hunter-server-sage.vercel.app/signedinusers",
+        {
+          email: user.email,
+        }
+      );
       if (res.data.deletedCount > 0) {
         setUser(null);
       }
@@ -36,7 +39,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       axios
-        .post("http://localhost:5000/jwt", {
+        .post("https://house-hunter-server-sage.vercel.app/jwt", {
           email: user.email,
         })
         .then((data) => {

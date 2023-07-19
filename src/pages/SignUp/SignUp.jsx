@@ -17,15 +17,18 @@ const SignUp = () => {
   //* functions
 
   const onSubmit = (data) => {
-    const { email, password, name, mobile, role } = data;
+    const { email, password, name, phone, role } = data;
     const updatedData = { ...data };
-    updatedData.mobile = `+880${updatedData.mobile}`;
+    updatedData.phone = `+880${updatedData.phone}`;
     const addUser = async () => {
-      const res = await fetch("http://localhost:5000/users", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(updatedData),
-      });
+      const res = await fetch(
+        "https://house-hunter-server-sage.vercel.app/users",
+        {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(updatedData),
+        }
+      );
       const data = await res.json();
       if (data.user === "exist") {
         setError("User already exist please login");
@@ -79,40 +82,40 @@ const SignUp = () => {
                   type="tel"
                   className="input input-bordered join-item grow rounded-r-3xl text-black font-semibold"
                   placeholder="Type your mobile number"
-                  {...register("mobile", {
+                  {...register("phone", {
                     required: true,
                     pattern: /1[1-9]\d{8}/,
                   })}
                 />
               </div>
-              {errors.mobile?.type === "required" && (
+              {errors.phone?.type === "required" && (
                 <p className="text-red-600 font-semibold mt-1 ml-2">
                   Mobile number is required
                 </p>
               )}
-              {errors.mobile?.type === "pattern" && (
+              {errors.phone?.type === "pattern" && (
                 <p className="text-red-600 font-semibold mt-1 ml-2">
                   Number must be start with 1 & must have 10 number in total.
                 </p>
               )}
-              <div className="from-control mt-6 font-semibold text-black">
-                <select
-                  {...register("role", { required: true })}
-                  className="select select-bordered w-full max-w-[50%]"
-                  value="Select role..."
-                >
-                  <option value="" disabled>
-                    Select role...
-                  </option>
-                  <option value="House Owner">House Owner</option>
-                  <option value="House Renter">House Renter</option>
-                </select>
-                {errors.role?.type === "required" && (
-                  <p className="text-red-600 font-semibold mt-1 ml-2">
-                    Role is required
-                  </p>
-                )}
-              </div>
+            </div>
+            <div className="from-control mt-6 font-semibold text-black">
+              <select
+                {...register("role", { required: true })}
+                className="select select-bordered w-full max-w-[50%]"
+                value="Select role..."
+              >
+                <option defaultValue="" disabled selected>
+                  Select role...
+                </option>
+                <option value="House Owner">House Owner</option>
+                <option value="House Renter">House Renter</option>
+              </select>
+              {errors.role?.type === "required" && (
+                <p className="text-red-600 font-semibold mt-1 ml-2">
+                  Role is required
+                </p>
+              )}
             </div>
             <div className="form-control">
               <label className="label">

@@ -13,7 +13,8 @@ const Router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-        loader: () => fetch("http://localhost:5000/totalhouses"),
+        loader: () =>
+          fetch("https://house-hunter-server-sage.vercel.app/totalhouses"),
       },
       {
         path: "/houses/:id",

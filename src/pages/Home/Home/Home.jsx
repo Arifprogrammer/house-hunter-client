@@ -24,7 +24,7 @@ const Home = () => {
   useEffect(() => {
     const getHouse = async () => {
       const res = await fetch(
-        `http://localhost:5000/houses?page=${currentPage}&limit=${itemsPerPage}`
+        `https://house-hunter-server-sage.vercel.app/houses?page=${currentPage}&limit=${itemsPerPage}`
       );
       const getData = await res.json();
       setHouses(getData);
