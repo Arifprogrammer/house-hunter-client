@@ -33,9 +33,9 @@ const Home = () => {
   }, [currentPage, itemsPerPage]);
 
   return (
-    <section className="my-container my-16 lg:mt-12 lg:mb-20">
-      <div className="mb-16 flex justify-center items-center gap-x-6">
-        <div className="join w-3/5">
+    <section className="my-container my-16 lg:mt-12 lg:mb-20 px-4 lg:px-0">
+      <div className="mb-16 flex flex-col lg:flex-row justify-center items-center gap-y-3 lg:gap-x-6">
+        <div className="join lg:w-3/5">
           <input
             className="input input-bordered join-item grow"
             placeholder="Search..."

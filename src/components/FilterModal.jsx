@@ -1,4 +1,4 @@
-import { Fragment, useRef } from "react";
+import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
 import { BsFilterRight } from "react-icons/bs";
@@ -12,7 +12,7 @@ export default function FilterModal({ open, setOpen }) {
 
   function removeEmptyStringProperties(obj) {
     for (const key in obj) {
-      if (obj.hasOwnProperty(key) && obj[key] === "") {
+      if (obj[key] === "") {
         delete obj[key];
       }
     }
@@ -176,7 +176,7 @@ export default function FilterModal({ open, setOpen }) {
                       <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                         <button
                           type="submit"
-                          className="inline-flex w-full justify-center rounded-md bg-lime-400 px-3 py-2 text-sm font-semibold text-blue-900 shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto gap-x-2"
+                          className="inline-flex lg:w-full justify-center rounded-md bg-lime-400 px-3 py-2 text-sm font-semibold text-blue-900 shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto gap-x-2"
                         >
                           <BsFilterRight className="text-xl font-bold" />
                           <p>Filter</p>

@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 const SignUp = () => {
   //* hooks
+  const [error, setError] = useState("");
   const {
     register,
     handleSubmit,
@@ -20,12 +22,14 @@ const SignUp = () => {
     updatedData.mobile = `+880${updatedData.mobile}`;
     const addUser = async () => {
       const res = await fetch("http://localhost:5000/users", {
-        method: "PUT",
+        method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(updatedData),
       });
       const data = await res.json();
-      if (data.upsertedCount || data.matchedCount) {
+      if (data.user === "exist") {
+        setError("User already exist please login");
+      } else if (data.upsertedCount || data.matchedCount) {
         reset();
         setTimeout(() => {
           navigate("/login");
@@ -125,6 +129,7 @@ const SignUp = () => {
                   Email is required
                 </p>
               )}
+              <p className="text-red-600 font-semibold mt-1 ml-2">{error}</p>
             </div>
             <div className="form-control">
               <label className="label">
