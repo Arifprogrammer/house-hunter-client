@@ -6,6 +6,7 @@ import Home from "../pages/Home/Home/Home";
 import SpecificHouse from "../pages/SpecificHouse/SpecificHouse";
 import Dashboard from "../layouts/DashboardLayout";
 import BookedHouse from "../pages/Dashboard/Renter/BookedHouse";
+import ManageHouse from "../pages/Dashboard/Owner/ManageHouse";
 
 const Router = createBrowserRouter([
   {
@@ -36,10 +37,13 @@ const Router = createBrowserRouter([
     path: "dashboard",
     element: <Dashboard />,
     children: [
-      //! student routes
       {
         path: "bookedhouse",
         element: <BookedHouse />,
+      },
+      {
+        path: "managehouse",
+        element: <ManageHouse />,
       },
     ],
   },

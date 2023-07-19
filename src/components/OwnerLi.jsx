@@ -4,23 +4,23 @@ const OwnerLi = () => {
     <>
       <li>
         <NavLink
-          to="/dashboard/classes"
+          to="/dashboard/managehouse"
           className={({ isActive }) =>
             isActive
-              ? "text-red-700 font-semibold lg:border-b-4 border-b-red-700 text-xl"
-              : "font-semibold lg:border-b-4 lg:border-b-white hover:border-b-red-700 lg:text-white hover:text-red-700 lg:transition lg:duration-200 text-xl"
+              ? "text-red-700 font-semibold lg:border-b-4 border-b-red-700 text-lg"
+              : "font-semibold lg:border-b-4 lg:border-b-white hover:border-b-red-700 lg:text-white hover:text-red-700 lg:transition lg:duration-200 text-lg"
           }
         >
           Manage Houses
         </NavLink>
       </li>
-      <li className="pb-16">
+      <li>
         <NavLink
           to="/dashboard/users"
           className={({ isActive }) =>
             isActive
-              ? "text-red-700 font-semibold lg:border-b-4 border-b-red-700 text-xl"
-              : "font-semibold lg:border-b-4 lg:border-b-white hover:border-b-red-700 lg:text-white hover:text-red-700 lg:transition lg:duration-200 text-xl"
+              ? "text-red-700 font-semibold lg:border-b-4 border-b-red-700 text-lg"
+              : "font-semibold lg:border-b-4 lg:border-b-white hover:border-b-red-700 lg:text-white hover:text-red-700 lg:transition lg:duration-200 text-lg"
           }
         >
           Add New House

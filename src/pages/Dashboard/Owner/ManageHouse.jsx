@@ -1,14 +1,27 @@
+import { useContext } from "react";
+import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import ClassesRowsTable from "./HousesRowsTable";
+import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
-import useSelectedClasse from "../../../hooks/useBookedHouse";
-import BookedRowsTable from "./BookedRowsTable";
 
-const BookedHouse = () => {
+const ManageHouse = () => {
+  //* hooks
+  const { user } = useContext(AuthContext);
   //* customhooks
-  const [bookedHouse, refetch] = useSelectedClasse();
   const [axiosSecure] = useAxiosSecure();
-  console.log(bookedHouse);
-  const reverseBookedHouses = [...bookedHouse].reverse();
+  const token = localStorage.getItem("user_access_token");
+  const { data: myHouses = [], refetch } = useQuery({
+    queryKey: ["my-houses", user?.email],
+    enabled: !!user?.email && !!token,
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/dashboard/myhouses?email=${user?.email}`
+      );
+      return res.data;
+    },
+  });
+  const reverseMyHouses = [...myHouses].reverse();
 
   //* functions
   const handleDeleteData = (id) => {
@@ -23,8 +36,9 @@ const BookedHouse = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const deleteData = async () => {
-          const res = await axiosSecure.delete(`/dashboard/selected/${id}`);
-          // console.log(res.data);
+          const res = await axiosSecure.delete(
+            `/dashboard/selectedhouse/${id}`
+          );
           refetch();
           if (res.data.deletedCount) {
             Swal.fire("Deleted!", "Deleted", "success");
@@ -37,7 +51,7 @@ const BookedHouse = () => {
 
   return (
     <>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto w-full px-20">
         <table className="table">
           {/* head */}
           <thead>
@@ -50,14 +64,14 @@ const BookedHouse = () => {
               <th>Price</th>
               <th>Owner Name</th>
               <th>Phone</th>
+              <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            {reverseBookedHouses &&
-              reverseBookedHouses?.map((house, index) => (
-                <BookedRowsTable
+            {reverseMyHouses &&
+              reverseMyHouses?.map((house, index) => (
+                <ClassesRowsTable
                   key={house._id}
                   house={house}
                   index={index}
@@ -66,10 +80,10 @@ const BookedHouse = () => {
               ))}
           </tbody>
         </table>
-        {reverseBookedHouses.length === 0 && (
+        {reverseMyHouses?.length === 0 && (
           <>
             <p className="mt-10 text-red-600 font-bold text-lg text-center">
-              You have not selected any classes yet !!!
+              You have not add any classes yet !!!
             </p>
           </>
         )}
@@ -78,4 +92,4 @@ const BookedHouse = () => {
   );
 };
 
-export default BookedHouse;
+export default ManageHouse;
