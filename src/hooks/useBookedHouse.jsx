@@ -14,7 +14,6 @@ const useBookedHouse = () => {
       const res = await axiosSecure.get(
         `/dashboard/bookedhouse?email=${user.email}`
       );
-
       return res.data;
     },
   });

@@ -65,8 +65,7 @@ const SignIn = () => {
               setTimeout(() => {
                 navigate("/dashboard/bookedhouse");
               }, 1000);
-            }
-            if (updateGetData.role === "House Owner") {
+            } else {
               setTimeout(() => {
                 navigate("/dashboard/managehouse");
               }, 1000);

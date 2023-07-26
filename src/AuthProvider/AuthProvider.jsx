@@ -11,8 +11,6 @@ const AuthProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("user")) || null
   );
 
-  //* variables
-
   //* functions
 
   const logOut = () => {
@@ -53,6 +51,7 @@ const AuthProvider = ({ children }) => {
       localStorage.removeItem("user");
     }
   }, [user]);
+
   return (
     <>
       <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

@@ -12,6 +12,7 @@ const BookingForm = ({ price, house }) => {
   const [disable, setDisable] = useState(
     user?.role === "House Renter" ? false : true
   );
+  const [limit, setLimit] = useState("");
   const navigate = useNavigate();
 
   //* customhooks
@@ -63,6 +64,7 @@ const BookingForm = ({ price, house }) => {
         const res = await axiosSecure.get(`/bookedhouse?email=${user.email}`);
         if (res.data.length === 2) {
           setDisable(true);
+          setLimit(`"House Renter" can only book 2 houses`);
         } else {
           const newData = res.data.find((d) => d.houseId === house._id);
           if (newData) {
@@ -94,7 +96,7 @@ const BookingForm = ({ price, house }) => {
             type="text"
             value={user?.name}
             readOnly
-            className="input input-bordered text-black font-semibold"
+            className="input input-bordered text-gray-500 font-semibold"
           />
         </div>
         <div className="form-control">
@@ -107,7 +109,7 @@ const BookingForm = ({ price, house }) => {
             type="email"
             value={user?.email}
             readOnly
-            className="input input-bordered text-black font-semibold"
+            className="input input-bordered text-gray-500 font-semibold"
           />
         </div>
         <div className="from-control">
@@ -154,9 +156,16 @@ const BookingForm = ({ price, house }) => {
             Reserve
           </button>
           {disable && (
-            <p className="text-red-600 font-semibold mt-1 ml-2">
-              {`You have to login as "House Renter" and "House Renter" can only book 2 houses`}
+            <p
+              className={`${
+                limit ? "hidden" : "text-red-600 font-semibold mt-1 ml-2"
+              }`}
+            >
+              {`You have to login as "House Renter"`}
             </p>
+          )}
+          {limit && (
+            <p className="text-red-600 font-semibold mt-1 ml-2">{limit}</p>
           )}
         </div>
       </form>

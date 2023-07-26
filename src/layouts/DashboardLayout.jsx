@@ -12,7 +12,7 @@ const Dashboard = () => {
     <>
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content overflow-x-auto w-full px-20 py-20">
+        <div className="drawer-content overflow-x-auto w-full px-20 py-12">
           {/* Page content here */}
           <label
             htmlFor="my-drawer-2"

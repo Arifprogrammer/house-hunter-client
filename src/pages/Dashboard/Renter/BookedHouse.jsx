@@ -7,7 +7,6 @@ const BookedHouse = () => {
   //* customhooks
   const [bookedHouse, refetch] = useSelectedClasse();
   const [axiosSecure] = useAxiosSecure();
-  console.log(bookedHouse);
   const reverseBookedHouses = [...bookedHouse].reverse();
 
   //* functions

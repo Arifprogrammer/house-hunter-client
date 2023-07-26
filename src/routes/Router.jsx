@@ -7,11 +7,14 @@ import SpecificHouse from "../pages/SpecificHouse/SpecificHouse";
 import Dashboard from "../layouts/DashboardLayout";
 import BookedHouse from "../pages/Dashboard/Renter/BookedHouse";
 import ManageHouse from "../pages/Dashboard/Owner/ManageHouse";
+import AddHouse from "../pages/Dashboard/Owner/AddHouse";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
 const Router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -36,14 +39,21 @@ const Router = createBrowserRouter([
   {
     path: "dashboard",
     element: <Dashboard />,
+    errorElement: <ErrorPage />,
     children: [
+      //! renter routes
       {
         path: "bookedhouse",
         element: <BookedHouse />,
       },
+      //! owner routes
       {
         path: "managehouse",
         element: <ManageHouse />,
+      },
+      {
+        path: "newhouse",
+        element: <AddHouse />,
       },
     ],
   },

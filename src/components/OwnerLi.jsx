@@ -16,7 +16,7 @@ const OwnerLi = () => {
       </li>
       <li>
         <NavLink
-          to="/dashboard/users"
+          to="/dashboard/newhouse"
           className={({ isActive }) =>
             isActive
               ? "text-red-700 font-semibold lg:border-b-4 border-b-red-700 text-lg"

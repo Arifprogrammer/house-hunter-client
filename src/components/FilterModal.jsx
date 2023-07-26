@@ -3,13 +3,38 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
 import { BsFilterRight } from "react-icons/bs";
+import axios from "axios";
 
-export default function FilterModal({ open, setOpen }) {
+export default function FilterModal({
+  open,
+  setOpen,
+  setHouses,
+  setShow,
+  setError,
+}) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
+
+  //* custom data
+  const textFields = [
+    ["City", "city", "Norway"],
+    ["Availability", "availability", "18th July,23 to 24th July,23"],
+    ["Room Size", "roomSize", "3.44 x 5.45"],
+  ];
+
+  const priceFileds = [
+    ["$1000", "pricemin"],
+    ["$3800", "pricemax"],
+  ];
+
+  const numberFields = [
+    ["Bathrooms", "bathRooms", "2"],
+    ["BedRooms", "bedRooms", "4"],
+  ];
 
   function removeEmptyStringProperties(obj) {
     for (const key in obj) {
@@ -22,19 +47,31 @@ export default function FilterModal({ open, setOpen }) {
 
   const onSubmit = (data) => {
     const cleanedEmptyData = removeEmptyStringProperties(data);
-    if (cleanedEmptyData.hasOwnProperty("pricemax")) {
-      cleanedEmptyData.pricemax = parseInt(cleanedEmptyData.pricemax);
+    if (cleanedEmptyData === {}) {
+      setOpen(false);
+      return;
     }
-    if (cleanedEmptyData.hasOwnProperty("pricemin")) {
-      cleanedEmptyData.pricemin = parseInt(cleanedEmptyData.pricemin);
+    const propertiesToParse = ["pricemax", "pricemin", "bathRooms", "bedRooms"];
+    for (const property of propertiesToParse) {
+      if (cleanedEmptyData.hasOwnProperty(property)) {
+        cleanedEmptyData[property] = parseInt(cleanedEmptyData[property]);
+      }
     }
-    if (cleanedEmptyData.hasOwnProperty("bathRooms")) {
-      cleanedEmptyData.bathRooms = parseInt(cleanedEmptyData.bathRooms);
-    }
-    if (cleanedEmptyData.hasOwnProperty("bedRooms")) {
-      cleanedEmptyData.bedRooms = parseInt(cleanedEmptyData.bedRooms);
-    }
-    console.log(cleanedEmptyData);
+
+    const filterHouse = async () => {
+      const res = await axios.post(
+        "https://house-hunter-server-sage.vercel.app/filterhouse",
+        cleanedEmptyData
+      );
+      if (res.data.length < 1) {
+        setError("Not found any data please try again");
+      }
+      setHouses(res.data);
+      setShow(false);
+      reset();
+    };
+    filterHouse();
+
     setOpen(false);
   };
 
@@ -71,122 +108,91 @@ export default function FilterModal({ open, setOpen }) {
                       className="card-body p-5 lg:p-8 grid grid-cols-1 lg:grid-cols-2 items-center gap-x-6"
                       onSubmit={handleSubmit(onSubmit)}
                     >
-                      <div className="form-control">
-                        <label className="label">
-                          <span className="label-text text-black font-semibold text-base">
-                            City
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Norway"
-                          {...register("city")}
-                          className="input input-bordered text-black font-semibold"
-                        />
-                      </div>
-                      <div className="form-control">
-                        <label className="label">
-                          <span className="label-text text-black font-semibold text-base">
-                            Bedrooms
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="5"
-                          {...register("bedRooms", {
-                            pattern: /^[0-9]+$/,
-                          })}
-                          className="input input-bordered text-black font-semibold"
-                        />
-                        {errors.bedRooms?.type === "pattern" && (
-                          <p className="text-red-600 font-semibold mt-1 ml-2">
-                            Please provide a valid number
-                          </p>
-                        )}
-                      </div>
-                      <div className="form-control">
-                        <label className="label">
-                          <span className="label-text text-black font-semibold text-base">
-                            Bathrooms
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="3"
-                          {...register("bathRooms", {
-                            pattern: /^[0-9]+$/,
-                          })}
-                          className="input input-bordered text-black font-semibold"
-                        />
-                        {errors.bathRooms?.type === "pattern" && (
-                          <p className="text-red-600 font-semibold mt-1 ml-2">
-                            Please provide a valid number
-                          </p>
-                        )}
-                      </div>
-                      <div className="form-control">
-                        <label className="label">
-                          <span className="label-text text-black font-semibold text-base">
-                            Room Size
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="3.44 x 5.45"
-                          {...register("roomsize")}
-                          className="input input-bordered text-black font-semibold"
-                        />
-                      </div>
-                      <div className="form-control">
-                        <label className="label">
-                          <span className="label-text text-black font-semibold text-base">
-                            Availability
-                          </span>
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="18th July,23 to 24th July,23"
-                          {...register("availability")}
-                          className="input input-bordered text-black font-semibold"
-                        />
-                      </div>
+                      {textFields.map((tf) => (
+                        <div key={tf[1]} className="form-control">
+                          <label className="label">
+                            <span className="label-text text-black font-semibold text-base">
+                              {tf[0]}
+                            </span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder={tf[2]}
+                            {...register(`${tf[1]}`)}
+                            className="input input-bordered text-black font-semibold"
+                          />
+                        </div>
+                      ))}
+                      {numberFields.map((nf, i) => (
+                        <div key={i} className="form-control">
+                          <label className="label">
+                            <span className="label-text text-black font-semibold text-base">
+                              {nf[0]}*
+                            </span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder={nf[2]}
+                            {...register(`${nf[1]}`, {
+                              min: 0,
+                              pattern: /^[0-9]+$/,
+                            })}
+                            className="input input-bordered text-black font-semibold"
+                          />
+                          {errors[`${nf[1]}`]?.type === "pattern" && (
+                            <p className="text-red-600 font-semibold mt-1 ml-2">
+                              Please provide a valid number
+                            </p>
+                          )}
+                          {errors[`${nf[1]}`]?.type === "min" && (
+                            <p className="text-red-600 font-semibold mt-2">
+                              Only takes positive number.
+                            </p>
+                          )}
+                        </div>
+                      ))}
                       <div className="form-control">
                         <label className="label">
                           <span className="label-text text-black font-semibold text-base">
                             Price Per Month (Give a range)
                           </span>
                         </label>
-                        <div className="flex gap-x-3">
-                          <input
-                            type="text"
-                            placeholder="$1000"
-                            {...register("pricemin", {
-                              pattern: /^[0-9]+$/,
-                            })}
-                            className="input input-bordered text-black font-semibold w-1/2"
-                          />
-                          <input
-                            type="text"
-                            placeholder="$3800"
-                            {...register("pricemax", {
-                              pattern: /^[0-9]+$/,
-                            })}
-                            className="input input-bordered text-black font-semibold w-1/2"
-                          />
+                        <div className="grid grid-cols-2 gap-x-3">
+                          {priceFileds.map((pf) => (
+                            <>
+                              <input
+                                key={pf[1]}
+                                type="text"
+                                placeholder={pf[0]}
+                                {...register(`${pf[1]}`, {
+                                  pattern: /^[0-9]+$/,
+                                  min: 0,
+                                })}
+                                className="input input-bordered text-black font-semibold w-full"
+                              />
+                              {errors[`${pf[1]}`]?.type === "pattern" && (
+                                <p className="col-span-2 text-red-600 font-semibold mt-1 ml-2">
+                                  Please provide a number without symbol
+                                </p>
+                              )}
+                              {errors[`${pf[1]}`]?.type === "min" && (
+                                <p className="col-span-2 text-red-600 font-semibold mt-2">
+                                  Only takes positive number.
+                                </p>
+                              )}
+                            </>
+                          ))}
                         </div>
-                        {errors.pricemin?.type === "pattern" && (
-                          <p className="text-red-600 font-semibold mt-1 ml-2">
-                            Please provide a valid number
-                          </p>
-                        )}
-                        {errors.pricemax?.type === "pattern" && (
-                          <p className="text-red-600 font-semibold mt-1 ml-2">
-                            Please provide a valid number
-                          </p>
-                        )}
                       </div>
                       <div></div>
                       <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                        <button
+                          type="button"
+                          onClick={() => setOpen(false)}
+                          className="inline-flex justify-center rounded-md bg-gray-200 px-3 py-2 text-sm font-semibold text-blue-900 shadow-sm hover:bg-gray-400 hover:text-black sm:ml-3 sm:w-auto gap-x-2"
+                        >
+                          Cancel
+                        </button>
                         <button
                           type="submit"
                           className="inline-flex justify-center rounded-md bg-lime-400 px-3 py-2 text-sm font-semibold text-blue-900 shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto gap-x-2"

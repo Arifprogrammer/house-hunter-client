@@ -1,13 +1,17 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../../AuthProvider/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import ClassesRowsTable from "./HousesRowsTable";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import HousesRowsTable from "./HousesRowsTable";
+import EditHouseModal from "../../../components/EditHouseModal";
 
 const ManageHouse = () => {
   //* hooks
   const { user } = useContext(AuthContext);
+  const [open, setOpen] = useState(false);
+  const [specificHouse, setSpecificHouse] = useState(null);
+
   //* customhooks
   const [axiosSecure] = useAxiosSecure();
   const token = localStorage.getItem("user_access_token");
@@ -49,6 +53,11 @@ const ManageHouse = () => {
     });
   };
 
+  const handleModal = (house) => {
+    setSpecificHouse(house);
+    setOpen(true);
+  };
+
   return (
     <>
       <div className="overflow-x-auto w-full px-20">
@@ -71,10 +80,11 @@ const ManageHouse = () => {
           <tbody>
             {reverseMyHouses &&
               reverseMyHouses?.map((house, index) => (
-                <ClassesRowsTable
+                <HousesRowsTable
                   key={house._id}
                   house={house}
                   index={index}
+                  handleModal={handleModal}
                   handleDeleteData={handleDeleteData}
                 />
               ))}
@@ -88,6 +98,15 @@ const ManageHouse = () => {
           </>
         )}
       </div>
+      {specificHouse && (
+        <EditHouseModal
+          key={specificHouse._id}
+          open={open}
+          setOpen={setOpen}
+          specificHouse={specificHouse}
+          refetch={refetch}
+        />
+      )}
     </>
   );
 };

@@ -1,11 +1,8 @@
-import { useState } from "react";
-import EditHouseModal from "../../../components/EditHouseModal";
-
-const HousesRowsTable = ({ house, index, handleDeleteData }) => {
+const HousesRowsTable = ({ house, index, handleDeleteData, handleModal }) => {
   const { _id, houseName, image, address, city, price, ownerName, phone } =
     house;
   //*hooks
-  const [open, setOpen] = useState(false);
+
   return (
     <>
       <tr className="font-bold">
@@ -28,7 +25,7 @@ const HousesRowsTable = ({ house, index, handleDeleteData }) => {
         <td>
           <button
             className="px-3 border-2 border-blue-700 text-blue-700 hover:text-white hover:bg-blue-700 rounded-3xl"
-            onClick={() => setOpen(true)}
+            onClick={() => handleModal(house)}
           >
             Edit
           </button>
@@ -42,7 +39,6 @@ const HousesRowsTable = ({ house, index, handleDeleteData }) => {
           </button>
         </td>
       </tr>
-      <EditHouseModal open={open} setOpen={setOpen} house={house} />
     </>
   );
 };

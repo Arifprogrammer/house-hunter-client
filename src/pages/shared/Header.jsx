@@ -26,7 +26,7 @@ const Header = () => {
             <NavLink
               to={`${
                 (isRole.renter && "/dashboard/bookedhouse") ||
-                (isRole.admin && "/dashboard/managehouse")
+                (isRole.owner && "/dashboard/managehouse")
               }`}
               className={({ isActive }) =>
                 isActive
